@@ -301,33 +301,6 @@
             margin: 2px;
         }
 
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: -9999px;
-        }
-
-        .file-input-label {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #667eea;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .preview-image {
-            max-width: 200px;
-            margin-top: 10px;
-            border-radius: 8px;
-        }
-
         .success-message {
             background: #d3f9d8;
             color: #2b8a3e;
@@ -337,9 +310,14 @@
             display: none;
         }
 
-        .logo-preview {
-            max-width: 150px;
-            margin: 20px 0;
+        .debug-info {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #856404;
         }
     </style>
 </head>
@@ -350,17 +328,20 @@
             <h1>🔐 CMS Admin</h1>
             <p>Enter your password to access the admin panel</p>
             <div class="error-message" id="loginError">Incorrect password. Try again.</div>
-            <form id="loginForm">
+            <form id="loginForm" onsubmit="return false;">
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter admin password" required>
+                    <input type="password" id="password" placeholder="Enter admin password" required autocomplete="current-password">
                 </div>
-                <button type="submit" class="btn-primary">Login</button>
+                <button type="button" class="btn-primary" onclick="attemptLogin()">Login</button>
             </form>
             <p style="margin-top: 20px; font-size: 12px; color: #999;">
                 First time? Your password is: <strong>admin123</strong><br>
                 Change it in Settings tab after login.
             </p>
+            <div class="debug-info" id="debugInfo" style="display: none;">
+                Debug: <span id="debugText"></span>
+            </div>
         </div>
     </div>
 
@@ -385,25 +366,27 @@
             <div class="form-section">
                 <h2>Add New Blog Post</h2>
                 <div class="success-message" id="blogSuccess">Blog saved successfully!</div>
-                <form id="blogForm" class="form-grid">
-                    <div class="form-group">
-                        <label>Title *</label>
-                        <input type="text" name="title" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Genre</label>
-                        <input type="text" name="genre" placeholder="e.g., Technology, Lifestyle">
-                    </div>
-                    <div class="form-group">
-                        <label>Tags (comma separated)</label>
-                        <input type="text" name="tags" placeholder="e.g., writing, tutorial, tips">
-                    </div>
-                    <div class="form-group">
-                        <label>Content *</label>
-                        <textarea name="content" required></textarea>
+                <form id="blogForm" onsubmit="return false;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Title *</label>
+                            <input type="text" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Genre</label>
+                            <input type="text" name="genre" placeholder="e.g., Technology, Lifestyle">
+                        </div>
+                        <div class="form-group">
+                            <label>Tags (comma separated)</label>
+                            <input type="text" name="tags" placeholder="e.g., writing, tutorial, tips">
+                        </div>
+                        <div class="form-group">
+                            <label>Content *</label>
+                            <textarea name="content" required></textarea>
+                        </div>
                     </div>
                     <div class="btn-group">
-                        <button type="submit" class="btn btn-success">Save Blog</button>
+                        <button type="button" class="btn btn-success" onclick="saveBlog()">Save Blog</button>
                         <button type="button" class="btn btn-secondary" onclick="clearForm('blogForm')">Clear</button>
                     </div>
                 </form>
@@ -416,29 +399,31 @@
             <div class="form-section">
                 <h2>Add New Book</h2>
                 <div class="success-message" id="bookSuccess">Book saved successfully!</div>
-                <form id="bookForm" class="form-grid">
-                    <div class="form-group">
-                        <label>Book Title *</label>
-                        <input type="text" name="title" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Genre</label>
-                        <input type="text" name="genre" placeholder="e.g., Fiction, Mystery">
-                    </div>
-                    <div class="form-group">
-                        <label>Cover Image URL</label>
-                        <input type="url" name="coverImage" placeholder="https://...">
-                    </div>
-                    <div class="form-group">
-                        <label>Summary *</label>
-                        <textarea name="summary" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Reading Link</label>
-                        <input type="url" name="readingLink" placeholder="https://...">
+                <form id="bookForm" onsubmit="return false;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Book Title *</label>
+                            <input type="text" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Genre</label>
+                            <input type="text" name="genre" placeholder="e.g., Fiction, Mystery">
+                        </div>
+                        <div class="form-group">
+                            <label>Cover Image URL</label>
+                            <input type="url" name="coverImage" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Summary *</label>
+                            <textarea name="summary" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Reading Link</label>
+                            <input type="url" name="readingLink" placeholder="https://...">
+                        </div>
                     </div>
                     <div class="btn-group">
-                        <button type="submit" class="btn btn-success">Save Book</button>
+                        <button type="button" class="btn btn-success" onclick="saveBook()">Save Book</button>
                         <button type="button" class="btn btn-secondary" onclick="clearForm('bookForm')">Clear</button>
                     </div>
                 </form>
@@ -451,25 +436,27 @@
             <div class="form-section">
                 <h2>Add New Book Cover Design</h2>
                 <div class="success-message" id="coverSuccess">Cover saved successfully!</div>
-                <form id="coverForm" class="form-grid">
-                    <div class="form-group">
-                        <label>Cover Title *</label>
-                        <input type="text" name="title" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Cover Image URL *</label>
-                        <input type="url" name="imageUrl" required placeholder="https://...">
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea name="description"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Price (optional)</label>
-                        <input type="text" name="price" placeholder="$50">
+                <form id="coverForm" onsubmit="return false;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Cover Title *</label>
+                            <input type="text" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Cover Image URL *</label>
+                            <input type="url" name="imageUrl" required placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Price (optional)</label>
+                            <input type="text" name="price" placeholder="$50">
+                        </div>
                     </div>
                     <div class="btn-group">
-                        <button type="submit" class="btn btn-success">Save Cover</button>
+                        <button type="button" class="btn btn-success" onclick="saveCover()">Save Cover</button>
                         <button type="button" class="btn btn-secondary" onclick="clearForm('coverForm')">Clear</button>
                     </div>
                 </form>
@@ -482,29 +469,31 @@
             <div class="form-section">
                 <h2>Add New Product</h2>
                 <div class="success-message" id="productSuccess">Product saved successfully!</div>
-                <form id="productForm" class="form-grid">
-                    <div class="form-group">
-                        <label>Product Name *</label>
-                        <input type="text" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Image URL</label>
-                        <input type="url" name="imageUrl" placeholder="https://...">
-                    </div>
-                    <div class="form-group">
-                        <label>Description *</label>
-                        <textarea name="description" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Price</label>
-                        <input type="text" name="price" placeholder="$29.99">
-                    </div>
-                    <div class="form-group">
-                        <label>Purchase Link</label>
-                        <input type="url" name="purchaseLink" placeholder="https://...">
+                <form id="productForm" onsubmit="return false;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Product Name *</label>
+                            <input type="text" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Image URL</label>
+                            <input type="url" name="imageUrl" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Description *</label>
+                            <textarea name="description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="text" name="price" placeholder="$29.99">
+                        </div>
+                        <div class="form-group">
+                            <label>Purchase Link</label>
+                            <input type="url" name="purchaseLink" placeholder="https://...">
+                        </div>
                     </div>
                     <div class="btn-group">
-                        <button type="submit" class="btn btn-success">Save Product</button>
+                        <button type="button" class="btn btn-success" onclick="saveProduct()">Save Product</button>
                         <button type="button" class="btn btn-secondary" onclick="clearForm('productForm')">Clear</button>
                     </div>
                 </form>
@@ -517,21 +506,23 @@
             <div class="form-section">
                 <h2>Add Social Media Link</h2>
                 <div class="success-message" id="socialSuccess">Social link saved successfully!</div>
-                <form id="socialForm" class="form-grid">
-                    <div class="form-group">
-                        <label>Platform Name *</label>
-                        <input type="text" name="platform" required placeholder="e.g., Twitter, LinkedIn">
-                    </div>
-                    <div class="form-group">
-                        <label>Profile URL *</label>
-                        <input type="url" name="url" required placeholder="https://...">
-                    </div>
-                    <div class="form-group">
-                        <label>Icon (emoji or text) *</label>
-                        <input type="text" name="icon" required placeholder="e.g., 🐦 or Twitter">
+                <form id="socialForm" onsubmit="return false;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Platform Name *</label>
+                            <input type="text" name="platform" required placeholder="e.g., Twitter, LinkedIn">
+                        </div>
+                        <div class="form-group">
+                            <label>Profile URL *</label>
+                            <input type="url" name="url" required placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Icon (emoji or text) *</label>
+                            <input type="text" name="icon" required placeholder="e.g., 🐦 or Twitter">
+                        </div>
                     </div>
                     <div class="btn-group">
-                        <button type="submit" class="btn btn-success">Save Link</button>
+                        <button type="button" class="btn btn-success" onclick="saveSocialLink()">Save Link</button>
                         <button type="button" class="btn btn-secondary" onclick="clearForm('socialForm')">Clear</button>
                     </div>
                 </form>
@@ -543,13 +534,13 @@
         <div class="tab-content" id="settings">
             <div class="form-section">
                 <h2>Website Logo</h2>
-                <form id="logoForm">
+                <form id="logoForm" onsubmit="return false;">
                     <div class="form-group">
                         <label>Logo URL</label>
                         <input type="url" name="logoUrl" placeholder="https://...">
                     </div>
                     <div class="btn-group">
-                        <button type="submit" class="btn btn-success">Update Logo</button>
+                        <button type="button" class="btn btn-success" onclick="saveLogo()">Update Logo</button>
                     </div>
                 </form>
                 <div id="logoPreview"></div>
@@ -557,7 +548,7 @@
 
             <div class="form-section">
                 <h2>Change Admin Password</h2>
-                <form id="passwordForm">
+                <form id="passwordForm" onsubmit="return false;">
                     <div class="form-group">
                         <label>New Password</label>
                         <input type="password" name="newPassword" required>
@@ -567,7 +558,7 @@
                         <input type="password" name="confirmPassword" required>
                     </div>
                     <div class="btn-group">
-                        <button type="submit" class="btn btn-success">Change Password</button>
+                        <button type="button" class="btn btn-success" onclick="changePassword()">Change Password</button>
                     </div>
                 </form>
             </div>
@@ -584,14 +575,37 @@
     </div>
 
     <script>
-        // Storage helper functions
+        // Check if localStorage is available
+        function testLocalStorage() {
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                return true;
+            } catch(e) {
+                return false;
+            }
+        }
+
+        // Storage helper functions with error handling
         const storage = {
             get: (key) => {
-                const data = localStorage.getItem(key);
-                return data ? JSON.parse(data) : null;
+                try {
+                    const data = localStorage.getItem(key);
+                    return data ? JSON.parse(data) : null;
+                } catch(e) {
+                    console.error('Storage get error:', e);
+                    return null;
+                }
             },
             set: (key, value) => {
-                localStorage.setItem(key, JSON.stringify(value));
+                try {
+                    localStorage.setItem(key, JSON.stringify(value));
+                    return true;
+                } catch(e) {
+                    console.error('Storage set error:', e);
+                    alert('Error saving data. Your browser may have localStorage disabled.');
+                    return false;
+                }
             },
             getAll: (type) => {
                 return storage.get(type) || [];
@@ -620,27 +634,47 @@
         };
 
         // Authentication
-        function login(e) {
-            e.preventDefault();
+        function attemptLogin() {
             const password = document.getElementById('password').value;
             const savedPassword = storage.get('adminPassword') || 'admin123';
+            const debugEl = document.getElementById('debugInfo');
+            const debugText = document.getElementById('debugText');
+            
+            // Show debug info
+            debugEl.style.display = 'block';
+            debugText.textContent = `Checking password... localStorage available: ${testLocalStorage()}`;
             
             if (password === savedPassword) {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('adminDashboard').style.display = 'block';
-                loadAllData();
+                debugText.textContent = 'Login successful!';
+                setTimeout(() => {
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('adminDashboard').style.display = 'block';
+                    loadAllData();
+                }, 500);
             } else {
                 document.getElementById('loginError').style.display = 'block';
+                debugText.textContent = `Password mismatch. Expected: ${savedPassword}, Got: ${password}`;
+                setTimeout(() => {
+                    document.getElementById('loginError').style.display = 'none';
+                }, 3000);
             }
         }
+
+        // Also handle Enter key
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('password').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    attemptLogin();
+                }
+            });
+        });
 
         function logout() {
             document.getElementById('loginScreen').style.display = 'flex';
             document.getElementById('adminDashboard').style.display = 'none';
             document.getElementById('password').value = '';
+            document.getElementById('debugInfo').style.display = 'none';
         }
-
-        document.getElementById('loginForm').addEventListener('submit', login);
 
         // Tab switching
         function switchTab(tabName) {
@@ -663,9 +697,9 @@
         }
 
         // Blog management
-        document.getElementById('blogForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
+        function saveBlog() {
+            const form = document.getElementById('blogForm');
+            const formData = new FormData(form);
             const blog = {
                 title: formData.get('title'),
                 genre: formData.get('genre'),
@@ -676,12 +710,12 @@
             showSuccess('blog');
             clearForm('blogForm');
             loadBlogs();
-        });
+        }
 
         function loadBlogs() {
             const blogs = storage.getAll('blogs');
             const list = document.getElementById('blogsList');
-            list.innerHTML = '<h2>All Blog Posts</h2>';
+            list.innerHTML = '<h2>All Blog Posts (' + blogs.length + ')</h2>';
             
             blogs.forEach(blog => {
                 const card = document.createElement('div');
@@ -708,9 +742,9 @@
         }
 
         // Book management
-        document.getElementById('bookForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
+        function saveBook() {
+            const form = document.getElementById('bookForm');
+            const formData = new FormData(form);
             const book = {
                 title: formData.get('title'),
                 genre: formData.get('genre'),
@@ -722,12 +756,12 @@
             showSuccess('book');
             clearForm('bookForm');
             loadBooks();
-        });
+        }
 
         function loadBooks() {
             const books = storage.getAll('books');
             const list = document.getElementById('booksList');
-            list.innerHTML = '<h2>All Books</h2>';
+            list.innerHTML = '<h2>All Books (' + books.length + ')</h2>';
             
             books.forEach(book => {
                 const card = document.createElement('div');
@@ -753,9 +787,9 @@
         }
 
         // Cover management
-        document.getElementById('coverForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
+        function saveCover() {
+            const form = document.getElementById('coverForm');
+            const formData = new FormData(form);
             const cover = {
                 title: formData.get('title'),
                 imageUrl: formData.get('imageUrl'),
@@ -766,12 +800,12 @@
             showSuccess('cover');
             clearForm('coverForm');
             loadCovers();
-        });
+        }
 
         function loadCovers() {
             const covers = storage.getAll('covers');
             const list = document.getElementById('coversList');
-            list.innerHTML = '<h2>All Book Covers</h2>';
+            list.innerHTML = '<h2>All Book Covers (' + covers.length + ')</h2>';
             
             covers.forEach(cover => {
                 const card = document.createElement('div');
@@ -797,9 +831,9 @@
         }
 
         // Product management
-        document.getElementById('productForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
+        function saveProduct() {
+            const form = document.getElementById('productForm');
+            const formData = new FormData(form);
             const product = {
                 name: formData.get('name'),
                 imageUrl: formData.get('imageUrl'),
@@ -811,12 +845,12 @@
             showSuccess('product');
             clearForm('productForm');
             loadProducts();
-        });
+        }
 
         function loadProducts() {
             const products = storage.getAll('products');
             const list = document.getElementById('productsList');
-            list.innerHTML = '<h2>All Products</h2>';
+            list.innerHTML = '<h2>All Products (' + products.length + ')</h2>';
             
             products.forEach(product => {
                 const card = document.createElement('div');
@@ -842,9 +876,9 @@
         }
 
         // Social links management
-        document.getElementById('socialForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
+        function saveSocialLink() {
+            const form = document.getElementById('socialForm');
+            const formData = new FormData(form);
             const link = {
                 platform: formData.get('platform'),
                 url: formData.get('url'),
@@ -854,16 +888,143 @@
             showSuccess('social');
             clearForm('socialForm');
             loadSocialLinks();
-        });
+        }
 
         function loadSocialLinks() {
             const links = storage.getAll('socialLinks');
             const list = document.getElementById('socialList');
-            list.innerHTML = '<h2>All Social Links</h2>';
+            list.innerHTML = '<h2>All Social Links (' + links.length + ')</h2>';
             
             links.forEach(link => {
                 const card = document.createElement('div');
                 card.className = 'item-card';
                 card.innerHTML = `
                     <div class="item-info">
-                        <h3
+                        <h3>${link.icon} ${link.platform}</h3>
+                        <p>${link.url}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-danger btn-small" onclick="deleteSocialLink(${link.id})">Delete</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function deleteSocialLink(id) {
+            if (confirm('Delete this social link?')) {
+                storage.delete('socialLinks', id);
+                loadSocialLinks();
+            }
+        }
+
+        // Logo management
+        function saveLogo() {
+            const form = document.getElementById('logoForm');
+            const formData = new FormData(form);
+            const logoUrl = formData.get('logoUrl');
+            storage.set('siteLogo', logoUrl);
+            alert('Logo updated successfully!');
+            loadLogo();
+        }
+
+        function loadLogo() {
+            const logoUrl = storage.get('siteLogo');
+            const preview = document.getElementById('logoPreview');
+            if (logoUrl) {
+                preview.innerHTML = `<img src="${logoUrl}" style="max-width: 150px; margin: 20px 0; border-radius: 8px;" alt="Site Logo">`;
+            }
+        }
+
+        // Password management
+        function changePassword() {
+            const form = document.getElementById('passwordForm');
+            const formData = new FormData(form);
+            const newPass = formData.get('newPassword');
+            const confirmPass = formData.get('confirmPassword');
+            
+            if (newPass !== confirmPass) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            if (newPass.length < 6) {
+                alert('Password must be at least 6 characters long!');
+                return;
+            }
+            
+            storage.set('adminPassword', newPass);
+            alert('Password changed successfully! Use this password next time you login.');
+            clearForm('passwordForm');
+        }
+
+        // Data export/import
+        function exportData() {
+            const data = {
+                blogs: storage.getAll('blogs'),
+                books: storage.getAll('books'),
+                covers: storage.getAll('covers'),
+                products: storage.getAll('products'),
+                socialLinks: storage.getAll('socialLinks'),
+                siteLogo: storage.get('siteLogo'),
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `cms-backup-${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert('Data exported successfully!');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (confirm('This will replace all existing data. Continue?')) {
+                        storage.set('blogs', data.blogs || []);
+                        storage.set('books', data.books || []);
+                        storage.set('covers', data.covers || []);
+                        storage.set('products', data.products || []);
+                        storage.set('socialLinks', data.socialLinks || []);
+                        if (data.siteLogo) storage.set('siteLogo', data.siteLogo);
+                        
+                        alert('Data imported successfully!');
+                        loadAllData();
+                    }
+                } catch (err) {
+                    alert('Error importing data: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Load all data on dashboard open
+        function loadAllData() {
+            loadBlogs();
+            loadBooks();
+            loadCovers();
+            loadProducts();
+            loadSocialLinks();
+            loadLogo();
+        }
+
+        // Test localStorage on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!testLocalStorage()) {
+                alert('Warning: localStorage is not available. The admin panel may not work correctly. Please enable cookies/storage in your browser.');
+            }
+        });
+    </script>
+</body>
+</html>
