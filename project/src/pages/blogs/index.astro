@@ -1,0 +1,107 @@
+---
+// This runs on the server - gets data before page loads
+import { getAllBlogs } from '../../lib/cmsData.js';
+
+// Get all blogs (will be empty until you add some in the admin)
+const blogs = getAllBlogs();
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - My Portfolio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .blog-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .blog-card h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .blog-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .blog-tags {
+            margin-top: 15px;
+        }
+        .tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        .no-content {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📝 Blog Posts</h1>
+    
+    <script>
+        // This runs in the browser - loads fresh data
+        import { getAllBlogs } from '../../lib/cmsData.js';
+        
+        function loadBlogs() {
+            const blogs = getAllBlogs();
+            const grid = document.getElementById('blogGrid');
+            
+            if (blogs.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-content">
+                        <h2>No blog posts yet!</h2>
+                        <p>Add your first blog post in the admin panel.</p>
+                        <a href="/admin.html" style="color: #667eea;">Go to Admin →</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = blogs.map(blog => `
+                <div class="blog-card">
+                    <h2>${blog.title}</h2>
+                    <div class="blog-meta">
+                        ${blog.genre ? `<span>📁 ${blog.genre}</span> • ` : ''}
+                        <span>${new Date(blog.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <p>${blog.content.substring(0, 150)}...</p>
+                    <div class="blog-tags">
+                        ${blog.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Load blogs when page loads
+        loadBlogs();
+    </script>
+    
+    <div id="blogGrid" class="blog-grid"></div>
+</body>
+</html>
