@@ -56,6 +56,14 @@ import { getSiteLogo, getLatestBlogs } from '../lib/cmsData.js';
       </div>
     </section>
 
+    <!-- ✨ NEW SECTION: Latest Blog Posts from CMS -->
+    <section class="mb-16 opacity-0 animate-fade-in animate-delay-350">
+      <h2 class="text-3xl font-bold text-purple-400 mb-6">📝 Latest Blog Posts</h2>
+      <div id="latestBlogsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Blogs will be loaded here by JavaScript -->
+      </div>
+    </section>
+
     <!-- Latest Updates Section -->
     <section class="opacity-0 animate-fade-in animate-delay-400">
       <h2 class="text-3xl font-bold text-purple-400 mb-6">Latest Updates</h2>
@@ -79,3 +87,42 @@ import { getSiteLogo, getLatestBlogs } from '../lib/cmsData.js';
     </section>
   </div>
 </Layout>
+
+<!-- ✨ ADD THIS SCRIPT AT THE VERY END -->
+<script>
+  import { getSiteLogo, getLatestBlogs } from '../lib/cmsData.js';
+  
+  // Load CMS data when page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    // Get latest 3 blog posts
+    const latestBlogs = getLatestBlogs(3);
+    const container = document.getElementById('latestBlogsContainer');
+    
+    if (latestBlogs.length === 0) {
+      // No blogs yet - show a message
+      container.innerHTML = `
+        <div class="col-span-full text-center bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg border border-purple-500/20 p-12">
+          <p class="text-gray-400 text-lg mb-4">No blog posts yet. Check back soon!</p>
+          <a href="/admin.html" class="text-purple-400 hover:text-purple-300">Add your first blog post →</a>
+        </div>
+      `;
+    } else {
+      // Display the blogs
+      container.innerHTML = latestBlogs.map(blog => `
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg border border-purple-500/20 p-6 hover-scale">
+          <h3 class="text-xl font-bold text-purple-400 mb-2">${blog.title}</h3>
+          ${blog.genre ? `<span class="inline-block bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-sm mb-3">${blog.genre}</span>` : ''}
+          <p class="text-gray-300 mb-4">${blog.content.substring(0, 120)}...</p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            ${blog.tags.map(tag => `
+              <span class="text-xs bg-gray-700/50 text-gray-300 px-2 py-1 rounded">#${tag}</span>
+            `).join('')}
+          </div>
+          <a href="/blogs" class="inline-flex items-center px-4 py-2 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-all hover:scale-105">
+            Read More →
+          </a>
+        </div>
+      `).join('');
+    }
+  });
+</script>
