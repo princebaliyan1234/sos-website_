@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS Admin - SOS Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-box h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .login-box p {
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        /* Admin Dashboard */
+        .admin-container {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .admin-header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .admin-header h1 {
+            color: #667eea;
+            font-size: 24px;
+        }
+
+        .btn-logout {
+            padding: 10px 20px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #51cf66;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #868e96;
+            color: white;
+        }
+
+        .items-list {
+            margin-top: 30px;
+        }
+
+        .item-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-info h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 2px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .preview-image {
+            max-width: 200px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+
+        .success-message {
+            background: #d3f9d8;
+            color: #2b8a3e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .logo-preview {
+            max-width: 150px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-box">
+            <h1>🔐 CMS Admin</h1>
+            <p>Enter your password to access the admin panel</p>
+            <div class="error-message" id="loginError">Incorrect password. Try again.</div>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter admin password" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            <p style="margin-top: 20px; font-size: 12px; color: #999;">
+                First time? Your password is: <strong>admin123</strong><br>
+                Change it in Settings tab after login.
+            </p>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-container" id="adminDashboard">
+        <div class="admin-header">
+            <h1>📊 CMS Dashboard</h1>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('blogs')">📝 Blogs</button>
+            <button class="tab" onclick="switchTab('books')">📚 Books</button>
+            <button class="tab" onclick="switchTab('covers')">🎨 Book Covers</button>
+            <button class="tab" onclick="switchTab('products')">🛍️ Products</button>
+            <button class="tab" onclick="switchTab('social')">🔗 Social Links</button>
+            <button class="tab" onclick="switchTab('settings')">⚙️ Settings</button>
+        </div>
+
+        <!-- Blogs Tab -->
+        <div class="tab-content active" id="blogs">
+            <div class="form-section">
+                <h2>Add New Blog Post</h2>
+                <div class="success-message" id="blogSuccess">Blog saved successfully!</div>
+                <form id="blogForm" class="form-grid">
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Genre</label>
+                        <input type="text" name="genre" placeholder="e.g., Technology, Lifestyle">
+                    </div>
+                    <div class="form-group">
+                        <label>Tags (comma separated)</label>
+                        <input type="text" name="tags" placeholder="e.g., writing, tutorial, tips">
+                    </div>
+                    <div class="form-group">
+                        <label>Content *</label>
+                        <textarea name="content" required></textarea>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-success">Save Blog</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm('blogForm')">Clear</button>
+                    </div>
+                </form>
+            </div>
+            <div class="items-list" id="blogsList"></div>
+        </div>
+
+        <!-- Books Tab -->
+        <div class="tab-content" id="books">
+            <div class="form-section">
+                <h2>Add New Book</h2>
+                <div class="success-message" id="bookSuccess">Book saved successfully!</div>
+                <form id="bookForm" class="form-grid">
+                    <div class="form-group">
+                        <label>Book Title *</label>
+                        <input type="text" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Genre</label>
+                        <input type="text" name="genre" placeholder="e.g., Fiction, Mystery">
+                    </div>
+                    <div class="form-group">
+                        <label>Cover Image URL</label>
+                        <input type="url" name="coverImage" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Summary *</label>
+                        <textarea name="summary" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Reading Link</label>
+                        <input type="url" name="readingLink" placeholder="https://...">
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-success">Save Book</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm('bookForm')">Clear</button>
+                    </div>
+                </form>
+            </div>
+            <div class="items-list" id="booksList"></div>
+        </div>
+
+        <!-- Book Covers Tab -->
+        <div class="tab-content" id="covers">
+            <div class="form-section">
+                <h2>Add New Book Cover Design</h2>
+                <div class="success-message" id="coverSuccess">Cover saved successfully!</div>
+                <form id="coverForm" class="form-grid">
+                    <div class="form-group">
+                        <label>Cover Title *</label>
+                        <input type="text" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cover Image URL *</label>
+                        <input type="url" name="imageUrl" required placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (optional)</label>
+                        <input type="text" name="price" placeholder="$50">
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-success">Save Cover</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm('coverForm')">Clear</button>
+                    </div>
+                </form>
+            </div>
+            <div class="items-list" id="coversList"></div>
+        </div>
+
+        <!-- Products Tab -->
+        <div class="tab-content" id="products">
+            <div class="form-section">
+                <h2>Add New Product</h2>
+                <div class="success-message" id="productSuccess">Product saved successfully!</div>
+                <form id="productForm" class="form-grid">
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="url" name="imageUrl" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <textarea name="description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="text" name="price" placeholder="$29.99">
+                    </div>
+                    <div class="form-group">
+                        <label>Purchase Link</label>
+                        <input type="url" name="purchaseLink" placeholder="https://...">
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-success">Save Product</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm('productForm')">Clear</button>
+                    </div>
+                </form>
+            </div>
+            <div class="items-list" id="productsList"></div>
+        </div>
+
+        <!-- Social Links Tab -->
+        <div class="tab-content" id="social">
+            <div class="form-section">
+                <h2>Add Social Media Link</h2>
+                <div class="success-message" id="socialSuccess">Social link saved successfully!</div>
+                <form id="socialForm" class="form-grid">
+                    <div class="form-group">
+                        <label>Platform Name *</label>
+                        <input type="text" name="platform" required placeholder="e.g., Twitter, LinkedIn">
+                    </div>
+                    <div class="form-group">
+                        <label>Profile URL *</label>
+                        <input type="url" name="url" required placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Icon (emoji or text) *</label>
+                        <input type="text" name="icon" required placeholder="e.g., 🐦 or Twitter">
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-success">Save Link</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm('socialForm')">Clear</button>
+                    </div>
+                </form>
+            </div>
+            <div class="items-list" id="socialList"></div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="tab-content" id="settings">
+            <div class="form-section">
+                <h2>Website Logo</h2>
+                <form id="logoForm">
+                    <div class="form-group">
+                        <label>Logo URL</label>
+                        <input type="url" name="logoUrl" placeholder="https://...">
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-success">Update Logo</button>
+                    </div>
+                </form>
+                <div id="logoPreview"></div>
+            </div>
+
+            <div class="form-section">
+                <h2>Change Admin Password</h2>
+                <form id="passwordForm">
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" name="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirmPassword" required>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-success">Change Password</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-section">
+                <h2>Backup & Restore</h2>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="exportData()">📥 Export All Data</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📤 Import Data</button>
+                    <input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Storage helper functions
+        const storage = {
+            get: (key) => {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : null;
+            },
+            set: (key, value) => {
+                localStorage.setItem(key, JSON.stringify(value));
+            },
+            getAll: (type) => {
+                return storage.get(type) || [];
+            },
+            add: (type, item) => {
+                const items = storage.getAll(type);
+                item.id = Date.now();
+                item.createdAt = new Date().toISOString();
+                items.push(item);
+                storage.set(type, items);
+                return item;
+            },
+            update: (type, id, newData) => {
+                const items = storage.getAll(type);
+                const index = items.findIndex(item => item.id === id);
+                if (index !== -1) {
+                    items[index] = { ...items[index], ...newData };
+                    storage.set(type, items);
+                }
+            },
+            delete: (type, id) => {
+                let items = storage.getAll(type);
+                items = items.filter(item => item.id !== id);
+                storage.set(type, items);
+            }
+        };
+
+        // Authentication
+        function login(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const savedPassword = storage.get('adminPassword') || 'admin123';
+            
+            if (password === savedPassword) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                loadAllData();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('password').value = '';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', login);
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Form handlers
+        function showSuccess(type) {
+            const successEl = document.getElementById(type + 'Success');
+            successEl.style.display = 'block';
+            setTimeout(() => successEl.style.display = 'none', 3000);
+        }
+
+        function clearForm(formId) {
+            document.getElementById(formId).reset();
+        }
+
+        // Blog management
+        document.getElementById('blogForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const blog = {
+                title: formData.get('title'),
+                genre: formData.get('genre'),
+                tags: formData.get('tags').split(',').map(t => t.trim()).filter(t => t),
+                content: formData.get('content')
+            };
+            storage.add('blogs', blog);
+            showSuccess('blog');
+            clearForm('blogForm');
+            loadBlogs();
+        });
+
+        function loadBlogs() {
+            const blogs = storage.getAll('blogs');
+            const list = document.getElementById('blogsList');
+            list.innerHTML = '<h2>All Blog Posts</h2>';
+            
+            blogs.forEach(blog => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div class="item-info">
+                        <h3>${blog.title}</h3>
+                        <p>${blog.genre || 'No genre'} • ${new Date(blog.createdAt).toLocaleDateString()}</p>
+                        <div>${blog.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-danger btn-small" onclick="deleteBlog(${blog.id})">Delete</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function deleteBlog(id) {
+            if (confirm('Delete this blog post?')) {
+                storage.delete('blogs', id);
+                loadBlogs();
+            }
+        }
+
+        // Book management
+        document.getElementById('bookForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const book = {
+                title: formData.get('title'),
+                genre: formData.get('genre'),
+                coverImage: formData.get('coverImage'),
+                summary: formData.get('summary'),
+                readingLink: formData.get('readingLink')
+            };
+            storage.add('books', book);
+            showSuccess('book');
+            clearForm('bookForm');
+            loadBooks();
+        });
+
+        function loadBooks() {
+            const books = storage.getAll('books');
+            const list = document.getElementById('booksList');
+            list.innerHTML = '<h2>All Books</h2>';
+            
+            books.forEach(book => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div class="item-info">
+                        <h3>${book.title}</h3>
+                        <p>${book.genre || 'No genre'}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-danger btn-small" onclick="deleteBook(${book.id})">Delete</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function deleteBook(id) {
+            if (confirm('Delete this book?')) {
+                storage.delete('books', id);
+                loadBooks();
+            }
+        }
+
+        // Cover management
+        document.getElementById('coverForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const cover = {
+                title: formData.get('title'),
+                imageUrl: formData.get('imageUrl'),
+                description: formData.get('description'),
+                price: formData.get('price')
+            };
+            storage.add('covers', cover);
+            showSuccess('cover');
+            clearForm('coverForm');
+            loadCovers();
+        });
+
+        function loadCovers() {
+            const covers = storage.getAll('covers');
+            const list = document.getElementById('coversList');
+            list.innerHTML = '<h2>All Book Covers</h2>';
+            
+            covers.forEach(cover => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div class="item-info">
+                        <h3>${cover.title}</h3>
+                        <p>${cover.price || 'No price set'}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-danger btn-small" onclick="deleteCover(${cover.id})">Delete</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function deleteCover(id) {
+            if (confirm('Delete this cover?')) {
+                storage.delete('covers', id);
+                loadCovers();
+            }
+        }
+
+        // Product management
+        document.getElementById('productForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const product = {
+                name: formData.get('name'),
+                imageUrl: formData.get('imageUrl'),
+                description: formData.get('description'),
+                price: formData.get('price'),
+                purchaseLink: formData.get('purchaseLink')
+            };
+            storage.add('products', product);
+            showSuccess('product');
+            clearForm('productForm');
+            loadProducts();
+        });
+
+        function loadProducts() {
+            const products = storage.getAll('products');
+            const list = document.getElementById('productsList');
+            list.innerHTML = '<h2>All Products</h2>';
+            
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div class="item-info">
+                        <h3>${product.name}</h3>
+                        <p>${product.price || 'No price'}</p>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-danger btn-small" onclick="deleteProduct(${product.id})">Delete</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Delete this product?')) {
+                storage.delete('products', id);
+                loadProducts();
+            }
+        }
+
+        // Social links management
+        document.getElementById('socialForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const link = {
+                platform: formData.get('platform'),
+                url: formData.get('url'),
+                icon: formData.get('icon')
+            };
+            storage.add('socialLinks', link);
+            showSuccess('social');
+            clearForm('socialForm');
+            loadSocialLinks();
+        });
+
+        function loadSocialLinks() {
+            const links = storage.getAll('socialLinks');
+            const list = document.getElementById('socialList');
+            list.innerHTML = '<h2>All Social Links</h2>';
+            
+            links.forEach(link => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div class="item-info">
+                        <h3
