@@ -1,0 +1,73 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const socialLinks = [
+  {
+    title: "Discord Community",
+    description: "Join our vibrant Discord community to connect with fellow readers and writers!",
+    href: "https://discord.gg/eMST9snw2S",
+    icon: "/images/discord ico.jpeg",
+    text: "Join Discord Server"
+  },
+  {
+    title: "Instagram",
+    description: "Follow my writing journey and get daily updates on Instagram",
+    href: "https://instagram.com/silenceofscribes",
+    icon: "https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png",
+    text: "@silenceofscribes"
+  },
+  {
+    title: "YouTube Channel",
+    description: "Subscribe to my channel for writing tips and behind-the-scenes content",
+    href: "https://youtube.com/@Waddle_sos?si=wv9nMIdNE4uMtFLP",
+    icon: "https://www.youtube.com/s/desktop/7c155e84/img/favicon_48x48.png",
+    text: "Subscribe on YouTube"
+  },
+  {
+    title: "Webnovel",
+    description: "Read my stories and follow my author profile on Webnovel",
+    href: "https://www.webnovel.com/profile/4324804498?appId=10",
+    icon: "/images/webnovel icon.png",
+    text: "View Profile"
+  },
+  {
+    title: "Fiverr Services",
+    description: "Need custom writing services? Commission me on Fiverr for your writing projects!",
+    href: "https://www.fiverr.com/s/xXq1674",
+    icon: "https://npm-assets.fiverrcdn.com/assets/layout/favicon-32x32.3ac9a80.png",
+    text: "View Services"
+  },
+  {
+    title: "Linktree",
+    description: "Find all my links in one convenient place",
+    href: "https://linktr.ee/Silence_of_Scribes",
+    icon: "/images/inktree icon.png",
+    text: "View All Links"
+  }
+];
+---
+
+<Layout title="Join Us - Waddle">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-4xl font-bold text-purple-400 mb-8 opacity-0 animate-fade-in">Join my community & follow me on social media!</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {socialLinks.map((link, index) => (
+        <div class={`opacity-0 animate-fade-in animate-delay-${(index + 1) * 100} bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg border border-purple-500/20 p-6 hover-scale`}>
+          <div class="h-full flex flex-col">
+            <h2 class="text-2xl font-bold text-purple-400 mb-4">{link.title}</h2>
+            <p class="text-gray-300 mb-6 flex-grow">{link.description}</p>
+            <a 
+              href={link.href}
+              target="_blank" 
+              class="inline-flex items-center px-4 py-2 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-all hover:scale-105"
+            >
+              <img src={link.icon} alt={link.title} class="w-5 h-5 mr-2 rounded-lg" />
+              {link.text} →
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>

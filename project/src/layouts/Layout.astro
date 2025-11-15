@@ -1,0 +1,202 @@
+---
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="min-h-screen flex flex-col bg-gray-900">
+    <!-- Intro Animation -->
+    <div class="intro-animation fixed inset-0 z-50 bg-black flex items-center justify-center">
+      <div class="relative">
+        <div class="clouds">
+          <div class="cloud cloud-1"></div>
+          <div class="cloud cloud-2"></div>
+          <div class="cloud cloud-3"></div>
+        </div>
+        <h1 class="intro-title text-4xl md:text-6xl font-bold text-purple-400 text-center opacity-0 text-glow">
+          Silence of Scribes
+        </h1>
+        <p class="intro-tagline text-xl text-purple-400 text-center mt-4 opacity-0 text-glow">
+          - by - <br/>
+          Waddle
+        </p>
+      </div>
+    </div>
+
+    <div class="purple-glow"></div>
+    <div class="pen-background"></div>
+    <Navigation />
+    <main class="flex-grow relative z-10">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  body {
+    font-family: 'Merriweather', serif;
+  }
+
+  .purple-glow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(147, 51, 234, 0.2) 0%, rgba(147, 51, 234, 0.05) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .pen-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="rgba(147, 51, 234, 0.1)" stroke-width="1"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><path d="M11 11l-4 4"/></svg>');
+    background-repeat: repeat;
+    background-size: 100px 100px;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Text glow effect */
+  .text-glow {
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
+                 0 0 20px rgba(168, 85, 247, 0.3),
+                 0 0 30px rgba(168, 85, 247, 0.2);
+  }
+
+  /* Intro Animation Styles */
+  .intro-animation {
+    animation: fadeOut 1s ease-out 5s forwards;
+  }
+
+  .intro-title {
+    animation: fadeIn 1s ease-out 2s forwards;
+  }
+
+  .intro-tagline {
+    animation: fadeIn 1s ease-out 3s forwards;
+  }
+
+  .clouds {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .cloud {
+    position: absolute;
+    width: 300px;
+    height: 100px;
+    background: rgba(168, 85, 247, 0.2);
+    border-radius: 50px;
+    filter: blur(20px);
+  }
+
+  .cloud-1 {
+    top: -50px;
+    left: -150px;
+    animation: moveCloud1 2s ease-out 1s forwards;
+  }
+
+  .cloud-2 {
+    top: 50px;
+    right: -150px;
+    animation: moveCloud2 2s ease-out 1s forwards;
+  }
+
+  .cloud-3 {
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: moveCloud3 2s ease-out 1s forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  @keyframes moveCloud1 {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(200%);
+    }
+  }
+
+  @keyframes moveCloud2 {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-200%);
+    }
+  }
+
+  @keyframes moveCloud3 {
+    from {
+      transform: translate(-50%, 0);
+    }
+    to {
+      transform: translate(-50%, 200%);
+    }
+  }
+
+  /* Base animation delay classes */
+  :global(.animate-delay-100) { animation-delay: 100ms; }
+  :global(.animate-delay-200) { animation-delay: 200ms; }
+  :global(.animate-delay-300) { animation-delay: 300ms; }
+  :global(.animate-delay-400) { animation-delay: 400ms; }
+  :global(.animate-delay-500) { animation-delay: 500ms; }
+
+  /* Hover scale transition */
+  :global(.hover-scale) {
+    transition: transform 0.2s ease-in-out;
+  }
+  :global(.hover-scale:hover) {
+    transform: scale(1.02);
+  }
+</style>

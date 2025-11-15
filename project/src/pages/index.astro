@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Silence of Scribes - Official Website">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Hero Section -->
+    <section class="text-center mb-16 opacity-0 animate-fade-in">
+      <h1 class="text-4xl font-bold text-purple-400 mb-4">Welcome to My Literary World</h1>
+      <p class="text-xl text-gray-300">Exploring life's stories, one page at a time</p>
+    </section>
+
+    <!-- About the Website Section -->
+    <section class="mb-16 opacity-0 animate-fade-in animate-delay-200">
+      <h2 class="text-3xl font-bold text-purple-400 mb-6">About This Website</h2>
+      <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg border border-purple-500/20 p-8 hover-scale">
+        <p class="text-gray-300 leading-relaxed">
+          Welcome to my literary corner of the internet. This space serves as a hub for all my creative works,
+          thoughts, and connections with readers like you. Here, you'll find my latest books, blog posts about
+          writing and life, and ways to join our growing community of book lovers.
+        </p>
+      </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section class="mb-16 opacity-0 animate-fade-in animate-delay-300">
+      <h2 class="text-3xl font-bold text-purple-400 mb-6">About Me</h2>
+      <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg border border-purple-500/20 p-8 hover-scale">
+        <div class="flex flex-col md:flex-row gap-8">
+          <div class="md:w-1/3">
+            <img
+              src="/images/profile pic.png"
+              alt="Waddle"
+              class="rounded-2xl shadow-md w-full"
+              onerror="this.src='https://placehold.co/400x400?text=Profile+Picture'"
+            />
+          </div>
+          <div class="md:w-2/3">
+            <p class="text-gray-300 leading-relaxed mb-6">
+              Hello! My name is Waddle, also known as "Silence_of_Scribes."
+              I have been writing on Webnovel and other platforms since 2023, with a total writing experience of three years. Currently, I am an established author on Webnovel.
+            </p>
+            <div class="bg-gray-700/50 p-4 rounded-xl">
+              <p class="font-semibold mb-2 text-purple-400">📌 My Webnovel Profile:</p>
+              <a 
+                href="https://www.webnovel.com/profile/4324804498?appId=10" 
+                target="_blank"
+                class="inline-flex items-center px-4 py-2 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-all hover:scale-105"
+              >
+                Visit My Profile →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest Updates Section -->
+    <section class="opacity-0 animate-fade-in animate-delay-400">
+      <h2 class="text-3xl font-bold text-purple-400 mb-6">Latest Updates</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg border border-purple-500/20 p-6 hover-scale">
+          <h3 class="text-xl font-bold text-purple-400 mb-2">New Book Release</h3>
+          <p class="text-gray-300">Check out my latest novel "Surviving in the Freezing Apocalypse with My Alpha" on Webnovel!</p>
+          <a href="/books" class="inline-flex items-center px-4 py-2 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-all hover:scale-105 mt-4">Read Now →</a>
+        </div>
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg border border-purple-500/20 p-6 hover-scale">
+          <h3 class="text-xl font-bold text-purple-400 mb-2">Fiverr Services</h3>
+          <p class="text-gray-300">Need custom writing? Commission me on Fiverr for your writing projects!</p>
+          <a href="/join" class="inline-flex items-center px-4 py-2 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-all hover:scale-105 mt-4">Learn More →</a>
+        </div>
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg border border-purple-500/20 p-6 hover-scale">
+          <h3 class="text-xl font-bold text-purple-400 mb-2">Join Discord</h3>
+          <p class="text-gray-300">Connect with our growing community of readers and writers on Discord!</p>
+          <a href="/join" class="inline-flex items-center px-4 py-2 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-all hover:scale-105 mt-4">Join Now →</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
