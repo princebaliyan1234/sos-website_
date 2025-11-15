@@ -1,0 +1,117 @@
+---
+import { getAllBooks } from '../../lib/cmsData.js';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books - My Portfolio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .book-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .book-card:hover {
+            transform: translateY(-5px);
+        }
+        .book-cover {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            background: #e0e0e0;
+        }
+        .book-info {
+            padding: 20px;
+        }
+        .book-info h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .book-genre {
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .book-summary {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .read-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        .read-btn:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 My Books</h1>
+    
+    <script>
+        import { getAllBooks } from '../../lib/cmsData.js';
+        
+        function loadBooks() {
+            const books = getAllBooks();
+            const grid = document.getElementById('booksGrid');
+            
+            if (books.length === 0) {
+                grid.innerHTML = `
+                    <div style="text-align: center; padding: 60px; background: white; border-radius: 10px;">
+                        <h2>No books yet!</h2>
+                        <p>Add your first book in the admin panel.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = books.map(book => `
+                <div class="book-card">
+                    ${book.coverImage ? 
+                        `<img src="${book.coverImage}" alt="${book.title}" class="book-cover">` : 
+                        '<div class="book-cover" style="display: flex; align-items: center; justify-content: center; font-size: 48px;">📕</div>'
+                    }
+                    <div class="book-info">
+                        <h2>${book.title}</h2>
+                        ${book.genre ? `<div class="book-genre">${book.genre}</div>` : ''}
+                        <p class="book-summary">${book.summary}</p>
+                        ${book.readingLink ? 
+                            `<a href="${book.readingLink}" class="read-btn" target="_blank">Read Now →</a>` : 
+                            ''
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        loadBooks();
+    </script>
+    
+    <div id="booksGrid" class="books-grid"></div>
+</body>
+</html>
