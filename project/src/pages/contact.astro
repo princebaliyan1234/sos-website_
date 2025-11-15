@@ -1,0 +1,92 @@
+---
+import { getAllSocialLinks } from '../lib/cmsData.js';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - My Portfolio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f5f5f5;
+        }
+        .contact-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .social-link:hover {
+            transform: translateY(-3px);
+        }
+        .social-icon {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="contact-box">
+        <h1>📬 Get in Touch</h1>
+        <p>Connect with me on social media!</p>
+        
+        <script>
+            import { getAllSocialLinks } from '../lib/cmsData.js';
+            
+            function loadSocialLinks() {
+                const links = getAllSocialLinks();
+                const container = document.getElementById('socialLinks');
+                
+                if (links.length === 0) {
+                    container.innerHTML = `
+                        <p style="color: #666;">No social links added yet.<br>
+                        Add them in the <a href="/admin.html" style="color: #667eea;">admin panel</a>.</p>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = links.map(link => `
+                    <a href="${link.url}" target="_blank" rel="noopener" class="social-link">
+                        <span class="social-icon">${link.icon}</span>
+                        <span>${link.platform}</span>
+                    </a>
+                `).join('');
+            }
+            
+            loadSocialLinks();
+        </script>
+        
+        <div id="socialLinks" class="social-links"></div>
+    </div>
+</body>
+</html>
